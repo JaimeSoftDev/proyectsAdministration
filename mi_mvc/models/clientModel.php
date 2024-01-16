@@ -94,11 +94,28 @@ class ClientModel{
         }
     }
 
-    public function search(string $cliente)
+    public function search(string $campo = "contact_name", string $metodo = "contiene", string $dato = ""): array
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE contact_name LIKE :nombreContacto");
+        $sentencia = $this->conexion->prepare("SELECT * FROM projects WHERE $campo LIKE :dato");
         //ojo el si ponemos % siempre en comillas dobles "
-        $arrayDatos = [":nombreContacto" => "%$cliente%"];
+        switch ($metodo) {
+            case "contiene":
+                $arrayDatos = [":dato" => "%$dato%"];
+                break;
+            case "empieza":
+                $arrayDatos = [":dato" => "$dato%"];
+                break;
+            case "acaba":
+                $arrayDatos = [":dato" => "%$dato"];
+                break;
+            case "igual":
+                $arrayDatos = [":dato" => "$dato"];
+                break;
+            default:
+                $arrayDatos = [":dato" => "%$dato%"];
+                break;
+        }
+
         $resultado = $sentencia->execute($arrayDatos);
         if (!$resultado)
             return [];
