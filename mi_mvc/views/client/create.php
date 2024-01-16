@@ -1,0 +1,76 @@
+<?php
+require_once "assets/php/funciones.php";
+$cadenaErrores = "";
+$cadena = "";
+$errores = [];
+$datos = [];
+$visibilidad = "invisible";
+if (isset($_REQUEST["error"])) {
+  $errores = ($_SESSION["errores"]) ?? [];
+  $datos = ($_SESSION["datos"]) ?? [];
+  $cadena = "Atención Se han producido Errores";
+  $visibilidad = "visible";
+}
+?>
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h3">Añadir cliente</h1>
+  </div>
+  <div id="contenido">
+    <div class="alert alert-danger <?= $visibilidad ?>">
+      <?= $cadena ?>
+    </div>
+    <form action="index.php?tabla=client&accion=guardar&evento=crear" method="POST">
+      <div class="form-group">
+        <label for="nombreContacto">ID Fiscal </label>
+        <input type="number" required class="form-control" id="idFiscal" name="idFiscal"
+          value="<?= $_SESSION["datos"]["idFiscal"] ?? "" ?>" placeholder="Introduce el ID Fiscal">
+        <?= isset($errores["idFiscal"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "idFiscal") . '</div>' : ""; ?>
+      </div>
+      <div class="form-group">
+        <label for="nombreContacto">Nombre de contacto </label>
+        <input type="text" required class="form-control" id="nombreContacto" name="nombreContacto"
+          value="<?= $_SESSION["datos"]["nombreContacto"] ?? "" ?>" aria-describedby="nombreContacto" placeholder="Introduce nombre de contacto">
+        <?= isset($errores["nombreContacto"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "nombreContacto") . '</div>' : ""; ?>
+      </div>
+      <div class="form-group">
+        <label for="emailContacto">Email</label>
+        <input type="email" required class="form-control" id="emailContacto" name="emailContacto"
+          value="<?= $_SESSION["datos"]["emailContacto"] ?? "" ?>" placeholder="Email de contacto">
+        <?= isset($errores["emailContacto"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "emailContacto") . '</div>' : ""; ?>
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono </label>
+        <input type="number" class="form-control" id="telefono" name="telefono" placeholder="Introduce tu teléfono"
+          value="<?= $_SESSION["datos"]["telefono"] ?? "" ?>">
+        <?= isset($errores["telefono"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefono") . '</div>' : ""; ?>
+      </div>
+      <div class="form-group">
+        <label for="nombreCompañia">Nombre de la compañía </label>
+        <input type="text" class="form-control" id="nombreCompañia" name="nombreCompañia" value="<?= $_SESSION["datos"]["nombreCompañia"] ?? "" ?>"
+          placeholder="Introduce el nombre de la compañía">
+        <?= isset($errores["nombreCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "nombreCompañia") . '</div>' : ""; ?>
+      </div>
+      <div class="form-group">
+        <label for="direccionCompañia">Dirección de la compañía </label>
+        <input type="text" class="form-control" id="direccionCompañia" name="direccionCompañia" value="<?= $_SESSION["datos"]["direccionCompañia"] ?? "" ?>"
+          placeholder="Introduce la direccion de la compañía">
+        <?= isset($errores["direccionCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "direccionCompañia") . '</div>' : ""; ?>
+      </div>
+      <div class="form-group">
+        <label for="telefonoCompañia">Teléfono de la compañía </label>
+        <input type="number" class="form-control" id="telefonoCompañia" name="telefonoCompañia" value="<?= $_SESSION["datos"]["telefonoCompañia"] ?? "" ?>"
+          placeholder="Introduce el teléfono de la compañía">
+        <?= isset($errores["telefonCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefonoCompañia") . '</div>' : ""; ?>
+      </div>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a class="btn btn-danger" href="index.php">Cancelar</a>
+    </form>
+
+    <?php
+    //Una vez mostrados los errores, los eliminamos
+    unset($_SESSION["datos"]);
+    unset($_SESSION["errores"]);
+    ?>
+  </div>
+</main>

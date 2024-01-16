@@ -12,13 +12,13 @@ class UserModel
 
     public function insert(array $user): ?int //devuelve entero o null
     {
-        $sql = "INSERT INTO users(usuario, password, name, email)  VALUES (?, ?, ?, ?);";
+        $sql = "INSERT INTO users(usuario, password, name, email)  VALUES (:usuario, :password, :name, :email);";
         $sentencia = $this->conexion->prepare($sql);
         $arrayDatos = [
-            $user["usuario"],
-            $user["password"],
-            $user["name"],
-            $user["email"],
+            ":usuario" => $user["usuario"],
+            "password" => $user["password"],
+            ":name" => $user["name"],
+            ":email" => $user["email"],
         ];
         $resultado = $sentencia->execute($arrayDatos);
 
@@ -45,9 +45,10 @@ class UserModel
 
     public function readAll(): array
     {
-        $sentencia = $this->conexion->query("SELECT * FROM users;");
+        $sentencia = $this->conexion->prepare("SELECT * FROM users;");
+        $resultado = $sentencia->execute();
         //usamos método query
-        $usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        $usuarios = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $usuarios;
     }
 
@@ -69,7 +70,7 @@ class UserModel
     public function edit(int $idAntiguo, array $arrayUsuario): bool
     {
         try {
-            $sql = "UPDATE users SET name = :name, email=:email, ";
+            $sql = "UPDATE users SET name = :name, email = :email, ";
             $sql .= "usuario = :usuario, password= :password ";
             $sql .= " WHERE id = :id;";
             $arrayDatos = [
@@ -95,7 +96,7 @@ class UserModel
         $resultado = $sentencia->execute($arrayDatos);
         if (!$resultado)
             return [];
-        $users = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        $users = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $users;
     }
     public function login(string $usuario, string $password): ?stdClass

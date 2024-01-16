@@ -16,6 +16,15 @@
               <li><a class="dropdown-item" href="index.php?tabla=user&accion=buscar">Buscar </a></li>
           </ul>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="index.php" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-user"></i> Clientes</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="index.php?tabla=client&accion=crear">Añadir</a></li>
+              <li><a class="dropdown-item" href="index.php?tabla=client&accion=listar">Listar </a></li>
+              <li><a class="dropdown-item" href="index.php?tabla=client&accion=buscar">Buscar </a></li>
+          </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="shopping-cart"></span>

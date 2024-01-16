@@ -7,7 +7,7 @@ USE  mvc_pdo;
 
 CREATE TABLE `clients` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-   idFiscal varchar(9) NOT NULL COMMENT 'CIF DNI ESPANYOLES',
+  `idFiscal` varchar(9) NOT NULL COMMENT 'CIF DNI ESPANYOLES',
   `contact_name` varchar(255) NOT NULL,
   `contact_email` varchar(255) NOT NULL,
   `contact_phone_number` varchar(255) DEFAULT NULL,

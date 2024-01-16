@@ -1,11 +1,11 @@
 <?php
-require_once "controllers/usersController.php";
+require_once "controllers/clientsController.php";
 
 $mensaje = "";
 $clase = "alert alert-success";
 $visibilidad = "hidden";
 $mostrarDatos = false;
-$controlador = new UsersController();
+$controlador = new ClientsController();
 $usuario = "";
 
 if (isset($_REQUEST["evento"])) {
@@ -41,7 +41,7 @@ if (isset($_REQUEST["evento"])) {
             <?= $mensaje ?>
         </div>
         <div>
-        <form action="index.php?tabla=user&accion=buscar&evento=filtrar" method="POST">
+        <form action="index.php?tabla=client&accion=buscar&evento=filtrar" method="POST">
             <div class="form-group">
                 <label for="usuario">Buscar Usuario</label>
                 <input type="text" required class="form-control" id="busqueda" name="busqueda" value="<?= $usuario ?>" placeholder="Buscar por Usuario">
