@@ -25,11 +25,19 @@ function router()
             "borrar" => "delete.php",
             "editar" => "edit.php"
         ],
-        "client" => [ 
+        "client" => [
             "crear" => "create.php",
             "guardar" => "store.php",
             "ver" => "show.php",
             "listar" => "list.php",
+            "buscar" => "search.php",
+            "borrar" => "delete.php",
+            "editar" => "edit.php"
+        ],
+        "project" => [
+            "crear" => "create.php",
+            "guardar" => "store.php",
+            "ver" => "show.php",
             "buscar" => "search.php",
             "borrar" => "delete.php",
             "editar" => "edit.php"
