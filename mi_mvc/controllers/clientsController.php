@@ -12,9 +12,56 @@ class ClientsController
     }
 
     public function crear (array $arrayClient):void {
-        $id=$this->model->insert ($arrayClient);
-        ($id==null)?header("location:index.php?tabla=client&accion=crear&error=true&id={$id}"): header("location:index.php?tabla=client&accion=ver&id=".$id);
-        exit ();
+        $error = false;
+        $errores= [];
+        //vaciando posibles errores anteriores
+        $_SESSION["errores"] = [];
+        $_SESSION["datos"] = [];
+
+        // ERRORES DE TIPO
+        //Controlando el dni para que sea válido
+        if(!is_valid_dni($arrayClient["idFiscal"])){
+            $error = true;
+            $errores["dni"][]="El dni introducido no es válido";
+        }
+
+        //Controlando campos no vacíos
+        $arrayNoNulos = ["idFiscal", "nombreContacto", "emailContacto"];
+        $nulos = HayNulos($arrayNoNulos, $arrayClient);
+        if (count($nulos) > 0){
+            $error = true;
+            for($i=0; $i<count($nulos); $i++){
+                $errores[$nulos[$i]][]="El campo {$nulos[$i]} es nulo";
+            }
+        }
+
+        //Controlando los campos que son únicos
+        $camposUnicos = ["idFiscal","contact_email"];
+        $requestUnico=["idFiscal","emailContacto"];
+        $i=0;
+        foreach ($camposUnicos as $CampoUnico) {
+            if ($this->model->exists($CampoUnico, $arrayClient[$requestUnico[$i]])) {
+                $errores[$CampoUnico][] = "El {$arrayClient[$requestUnico[$i]]} de {$CampoUnico} ya existe";
+                $error = true;
+                $i++;
+            }
+        }
+        $id = null;
+        if (!$error)
+            $id = $this->model->insert($arrayClient);
+
+        if ($id == null) {
+            $_SESSION["errores"] = $errores;
+            $_SESSION["datos"] = $arrayClient;
+            header("location:index.php?accion=crear&tabla=client&error=true&id={$id}");
+            exit();
+        } else {
+            unset($_SESSION["errores"]);
+            unset($_SESSION["datos"]);
+            header("location:index.php?accion=ver&tabla=client&id=" . $id);
+            exit();
+        }
+
     }
 
     public function ver(int $id): ?stdClass

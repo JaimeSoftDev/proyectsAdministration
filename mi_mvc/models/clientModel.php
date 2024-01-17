@@ -123,4 +123,11 @@ class ClientModel
         $clients = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $clients;
     }
+    public function exists(string $campo, string $valor): bool
+    {
+        $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE $campo=:valor");
+        $arrayDatos = [":valor" => $valor];
+        $resultado = $sentencia->execute($arrayDatos);
+        return (!$resultado || $sentencia->rowCount() <= 0) ? false : true;
+    }
 }
