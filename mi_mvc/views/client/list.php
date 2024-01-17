@@ -2,7 +2,7 @@
 require_once "controllers/clientsController.php";
 
 $controlador = new ClientsController();
-$clients = $controlador->listar();
+$clients = $controlador->listar(comprobarSiEsBorrable:true);
 $visibilidad = "hidden";
 if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
     $visibilidad = "visibility";
@@ -16,7 +16,8 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
 
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h3">Listar clientes</h1>
     </div>
     <div id="contenido">
@@ -25,9 +26,9 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
         </div>
         <table class="table table-light table-hover">
             <?php
-            if (count($clients) <= 0) :
+            if (count($clients) <= 0):
                 echo "No hay Datos a Mostrar";
-            else : ?>
+            else: ?>
                 <table class="table table-light table-hover">
                     <thead class="table-dark">
                         <tr>
@@ -44,28 +45,56 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($clients as $client) :
+                        <?php foreach ($clients as $client):
                             $id = $client->id;
-                        ?>
+                            ?>
                             <tr>
-                                <th scope="row"><?= $client->id ?></th>
-                                <td><?= $client->idFiscal ?></td>
-                                <td><?= $client->contact_name ?></td>
-                                <td><?= $client->contact_email ?></td>
-                                <td><?= $client->contact_phone_number ?></td>
-                                <td><?= $client->company_name ?></td>
-                                <td><?= $client->company_address ?></td>
-                                <td><?= $client->company_phone_number ?></td>
-                                <td><a class="btn btn-danger" href="index.php?tabla=client&accion=borrar&id=<?= $id ?>"><i class="fa fa-trash"></i> Borrar</a></td>
-                                <td><a class="btn btn-success" href="index.php?tabla=client&accion=editar&id=<?= $id ?>"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+                                <th scope="row">
+                                    <?= $client->id ?>
+                                </th>
+                                <td>
+                                    <?= $client->idFiscal ?>
+                                </td>
+                                <td>
+                                    <?= $client->contact_name ?>
+                                </td>
+                                <td>
+                                    <?= $client->contact_email ?>
+                                </td>
+                                <td>
+                                    <?= $client->contact_phone_number ?>
+                                </td>
+                                <td>
+                                    <?= $client->company_name ?>
+                                </td>
+                                <td>
+                                    <?= $client->company_address ?>
+                                </td>
+                                <td>
+                                    <?= $client->company_phone_number ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $disable = "";
+                                    $ruta = "index.php?tabla=user&accion=borrar&id={$id}";
+                                    if (isset($client->esBorrable) && $client->esBorrable == false) {
+                                        $disable = "disabled";
+                                        $ruta = "#";
+                                    }
+                                    ?>
+                                    <a class="btn btn-danger <?= $disable ?>" href="<?= $ruta ?>"><i class="fa fa-trash"></i>
+                                        Borrar</a>
+                                </td>
+                                <td><a class="btn btn-success" href="index.php?tabla=client&accion=editar&id=<?= $id ?>"><i
+                                            class="fas fa-pencil-alt"></i> Editar</a></td>
                             </tr>
-                        <?php
+                            <?php
                         endforeach;
 
                         ?>
                     </tbody>
                 </table>
-            <?php
+                <?php
             endif;
             ?>
     </div>

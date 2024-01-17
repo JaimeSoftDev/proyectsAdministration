@@ -1,6 +1,7 @@
 <?php
 require_once "assets/php/funciones.php";
 require_once "models/userModel.php";
+require_once "controllers/projectsController.php";
 
 class UsersController
 {
@@ -25,9 +26,9 @@ class UsersController
             $error = true;
             $errores["email"][] = "El email tiene un formato incorrecto";
         }
-        if (!is_valid_user($arrayUser["usuario"])){
-            $error=true;
-            $errores["usuario"][]="El nombre de usuario no es válido";
+        if (!is_valid_user($arrayUser["usuario"])) {
+            $error = true;
+            $errores["usuario"][] = "El nombre de usuario no es válido";
         }
 
         //campos NO VACIOS
@@ -70,9 +71,15 @@ class UsersController
     {
         return $this->model->read($id);
     }
-    public function listar()
+    public function listar(bool $comprobarSiEsBorrable = false)
     {
-        return $this->model->readAll();
+        $users = $this->model->readAll();
+        if ($comprobarSiEsBorrable) {
+            foreach ($users as $user) {
+                $user->esBorrable = $this->esBorrable($user);
+            }
+        }
+        return $users;
     }
     public function borrar(int $id): void
     {
@@ -100,9 +107,28 @@ class UsersController
         header($redireccion);
         exit();
     }
-    public function buscar(string $usuario, string $campo, string $metodo): array
+    public function buscar(string $usuario, string $campo, string $metodo, bool $comprobarSiEsBorrable = false): array
     {
-        return $this->model->search($usuario, $campo, $metodo);
+        $users= $this->model->search($usuario, $campo, $metodo);
+        if ($comprobarSiEsBorrable) {
+            foreach ($users as $user) {
+                $user->esBorrable = $this->esBorrable($user);
+            }
+        }
+        return $users;
+
     }
+    private function esBorrable(stdClass $user): bool
+    {
+        $projectController = new ProjectsController();
+        $borrable = true;
+        // si ese usuario está en algún proyecto, No se puede borrar.
+        if (count($projectController->buscar("user_id", "igual", $user->id)) > 0)
+            $borrable = false;
+
+        return $borrable;
+    }
+
+
 
 }

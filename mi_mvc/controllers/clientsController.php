@@ -1,6 +1,7 @@
 <?php
 require_once "assets/php/funciones.php";
 require_once "models/clientModel.php";
+require_once "controllers/projectsController.php";
 
 class ClientsController
 {
@@ -68,9 +69,15 @@ class ClientsController
     {
         return $this->model->read($id);
     }
-    public function listar()
+    public function listar(bool $comprobarSiEsBorrable=false)
     {
-        return $this->model->readAll();
+        $clients = $this->model->readAll();
+        if ($comprobarSiEsBorrable) {
+            foreach ($clients as $client) {
+                $client->esBorrable = $this->esBorrable($client);
+            }
+        }
+        return $clients;
     }
     public function borrar(int $id)
     {
@@ -97,9 +104,25 @@ class ClientsController
         header($redireccion);
         exit();
     }
-    public function buscar($client, $campo, $metodo): array
+    public function buscar($client, $campo, $metodo, bool $comprobarSiEsBorrable = false): array
     {
-        return $this->model->search($client, $campo, $metodo);
+        $clients = $this->model->search($client, $campo, $metodo);
+        if ($comprobarSiEsBorrable) {
+            foreach ($clients as $client) {
+                $client->esBorrable = $this->esBorrable($client);
+            }
+        }
+        return $clients;
+    }
+    private function esBorrable(stdClass $client): bool
+    {
+        $projectController = new ProjectsController();
+        $borrable = true;
+        // si ese cliente está en algún proyecto, No se puede borrar.
+        if (count($projectController->buscar("client_id", "igual", $client->id)) > 0)
+            $borrable = false;
+
+        return $borrable;
     }
 
 }

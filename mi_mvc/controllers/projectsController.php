@@ -40,7 +40,7 @@ class ProjectsController
           if ($id == null) {
             $_SESSION["errores"] = $errores;
             $_SESSION["datos"] = $arrayProject;
-            //header("location:index.php?accion=crear&tabla=project&error=true&id={$id}");
+            header("location:index.php?accion=crear&tabla=project&error=true&id={$id}");
             exit();
         } else {
             unset($_SESSION["errores"]);

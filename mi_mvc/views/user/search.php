@@ -12,14 +12,14 @@ if (isset($_REQUEST["evento"])) {
     $mostrarDatos = true;
     switch ($_REQUEST["evento"]) {
         case "todos":
-            $users = $controlador->listar();
+            $users = $controlador->listar(comprobarSiEsBorrable:true);
             $mostrarDatos = true;
             break;
         case "filtrar":
             $usuario = ($_REQUEST["busqueda"]) ?? "";
             $campo = ($_REQUEST["campo"]) ?? "";
             $metodo = ($_REQUEST["metodo"]) ?? "";
-            $users = $controlador->buscar($usuario, $campo, $metodo);
+            $users = $controlador->buscar($usuario, $campo, $metodo, comprobarSiEsBorrable:true);
             break;
         case "borrar":
             $visibilidad = "visibility";
@@ -133,8 +133,17 @@ if (isset($_REQUEST["evento"])) {
                             <td>
                                 <?= $user->email ?>
                             </td>
-                            <td><a class="btn btn-danger" href="index.php?tabla=user&accion=borrar&id=<?= $id ?>"><i
-                                        class="fa fa-trash"></i> Borrar</a></td>
+                            <td>
+                                <?php
+                                $disable = "";
+                                $ruta = "index.php?tabla=user&accion=borrar&id={$id}";
+                                if (isset($user->esBorrable) && $user->esBorrable == false) {
+                                    $disable = "disabled";
+                                    $ruta = "#";
+                                }
+                                ?>
+                                <a class="btn btn-danger <?= $disable ?>" href="<?= $ruta ?>"><i class="fa fa-trash"></i> Borrar</a>
+                            </td>
                             <td><a class="btn btn-success" href="index.php?tabla=user&accion=editar&id=<?= $id ?>"><i
                                         class="fas fa-pencil-alt"></i> Editar</a></td>
                         </tr>

@@ -12,63 +12,75 @@ class ClientModel
 
     public function insert(array $client): ?int //devuelve entero o null
     {
-        $sql = "INSERT INTO clients(idFiscal, contact_name, contact_email, contact_phone_number, company_name, company_address, company_phone_number) ";
-        $sql .= " VALUES (:idFiscal, :nombreContacto, :emailContacto, :telefono, :nombreCompania, :direccionCompania, :telefonoCompania);";
-        $sentencia = $this->conexion->prepare($sql);
-        $arrayDatos = [
-            ":idFiscal" => $client["idFiscal"],
-            ":nombreContacto" => $client["nombreContacto"],
-            ":emailContacto" => $client["emailContacto"],
-            ":telefono" => $client["telefono"],
-            ":nombreCompania" => $client["nombreCompania"],
-            ":direccionCompania" => $client["direccionCompania"],
-            ":telefonoCompania" => $client["telefonoCompania"],
-        ];
-        $resultado = $sentencia->execute($arrayDatos);
+        try {
+            $sql = "INSERT INTO clients(idFiscal, contact_name, contact_email, contact_phone_number, company_name, company_address, company_phone_number) ";
+            $sql .= " VALUES (:idFiscal, :nombreContacto, :emailContacto, :telefono, :nombreCompania, :direccionCompania, :telefonoCompania);";
+            $sentencia = $this->conexion->prepare($sql);
+            $arrayDatos = [
+                ":idFiscal" => $client["idFiscal"],
+                ":nombreContacto" => $client["nombreContacto"],
+                ":emailContacto" => $client["emailContacto"],
+                ":telefono" => $client["telefono"],
+                ":nombreCompania" => $client["nombreCompania"],
+                ":direccionCompania" => $client["direccionCompania"],
+                ":telefonoCompania" => $client["telefonoCompania"],
+            ];
+            $resultado = $sentencia->execute($arrayDatos);
 
-        /*Pasar en el mismo orden de los ? execute devuelve un booleano. 
-        True en caso de que todo vaya bien, falso en caso contrario.*/
-        //Así podriamos evaluar
-        return ($resultado == true) ? $this->conexion->lastInsertId() : null;
+            /*Pasar en el mismo orden de los ? execute devuelve un booleano. 
+            True en caso de que todo vaya bien, falso en caso contrario.*/
+            //Así podriamos evaluar
+            return ($resultado == true) ? $this->conexion->lastInsertId() : null;
+        } catch (Exception $e) {
+            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
+            return null;
+        }
     }
     public function read(int $id): ?stdClass
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE id=:id");
-        $arrayDatos = [":id" => $id];
-        $resultado = $sentencia->execute($arrayDatos);
-        // ojo devuelve true si la consulta se ejecuta correctamente
-        // eso no quiere decir que hayan resultados
-        if (!$resultado)
+        try {
+            $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE id=:id");
+            $arrayDatos = [":id" => $id];
+            $resultado = $sentencia->execute($arrayDatos);
+            // ojo devuelve true si la consulta se ejecuta correctamente
+            // eso no quiere decir que hayan resultados
+            if (!$resultado)
+                return null;
+            //como sólo va a devolver un resultado uso fetch
+            // DE Paso probamos el FETCH_OBJ
+            $client = $sentencia->fetch(PDO::FETCH_OBJ);
+            //fetch duevelve el objeto stardar o false si no hay persona
+            return ($client == false) ? null : $client;
+        } catch (Exception $e) {
+            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
             return null;
-        //como sólo va a devolver un resultado uso fetch
-        // DE Paso probamos el FETCH_OBJ
-        $client = $sentencia->fetch(PDO::FETCH_OBJ);
-        //fetch duevelve el objeto stardar o false si no hay persona
-        return ($client == false) ? null : $client;
+        }
     }
 
     public function readAll()
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM clients;");
-        $resultado = $sentencia->execute();
-        //usamos método query
-        $clientes = $sentencia->fetchAll(PDO::FETCH_OBJ);
-        return $clientes;
+        try {
+            $sentencia = $this->conexion->prepare("SELECT * FROM clients;");
+            $resultado = $sentencia->execute();
+            //usamos método query
+            $clientes = $sentencia->fetchAll(PDO::FETCH_OBJ);
+            return $clientes;
+        } catch (Exception $e) {
+            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
+            return null;
+        }
     }
 
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM clients WHERE id =:id";
-        try {
+        
             $sentencia = $this->conexion->prepare($sql);
             //devuelve true si se borra correctamente
             //false si falla el borrado
             $resultado = $sentencia->execute([":id" => $id]);
             return ($sentencia->rowCount() <= 0) ? false : true;
-        } catch (Exception $e) {
-            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
-            return false;
-        }
+        
     }
 
     public function edit(int $idAntiguo, array $arrayCliente): bool
@@ -97,37 +109,47 @@ class ClientModel
 
     public function search(string $dato = "", string $campo = "contact_name", string $metodo = "contiene"): array
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE $campo LIKE :dato");
-        //ojo el si ponemos % siempre en comillas dobles "
-        switch ($metodo) {
-            case "contiene":
-                $arrayDatos = [":dato" => "%$dato%"];
-                break;
-            case "empieza":
-                $arrayDatos = [":dato" => "$dato%"];
-                break;
-            case "acaba":
-                $arrayDatos = [":dato" => "%$dato"];
-                break;
-            case "igual":
-                $arrayDatos = [":dato" => "$dato"];
-                break;
-            default:
-                $arrayDatos = [":dato" => "%$dato%"];
-                break;
-        }
+        try {
+            $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE $campo LIKE :dato");
+            //ojo el si ponemos % siempre en comillas dobles "
+            switch ($metodo) {
+                case "contiene":
+                    $arrayDatos = [":dato" => "%$dato%"];
+                    break;
+                case "empieza":
+                    $arrayDatos = [":dato" => "$dato%"];
+                    break;
+                case "acaba":
+                    $arrayDatos = [":dato" => "%$dato"];
+                    break;
+                case "igual":
+                    $arrayDatos = [":dato" => "$dato"];
+                    break;
+                default:
+                    $arrayDatos = [":dato" => "%$dato%"];
+                    break;
+            }
 
-        $resultado = $sentencia->execute($arrayDatos);
-        if (!$resultado)
+            $resultado = $sentencia->execute($arrayDatos);
+            if (!$resultado)
+                return [];
+            $clients = $sentencia->fetchAll(PDO::FETCH_OBJ);
+            return $clients;
+        } catch (Exception $e) {
+            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
             return [];
-        $clients = $sentencia->fetchAll(PDO::FETCH_OBJ);
-        return $clients;
+        }
     }
     public function exists(string $campo, string $valor): bool
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE $campo=:valor");
-        $arrayDatos = [":valor" => $valor];
-        $resultado = $sentencia->execute($arrayDatos);
-        return (!$resultado || $sentencia->rowCount() <= 0) ? false : true;
+        try {
+            $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE $campo=:valor");
+            $arrayDatos = [":valor" => $valor];
+            $resultado = $sentencia->execute($arrayDatos);
+            return (!$resultado || $sentencia->rowCount() <= 0) ? false : true;
+        } catch (Exception $e) {
+            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
+            return false;
+        }
     }
 }

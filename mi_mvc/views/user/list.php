@@ -2,7 +2,7 @@
 require_once "controllers/usersController.php";
 
 $controlador = new UsersController();
-$users = $controlador->listar();
+$users = $controlador->listar(comprobarSiEsBorrable:true);
 $visibilidad = "hidden";
 if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
     $visibilidad = "visibility";
@@ -16,7 +16,8 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
 
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h3">Listar usuario</h1>
     </div>
     <div id="contenido">
@@ -25,9 +26,9 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
         </div>
         <table class="table table-light table-hover">
             <?php
-            if (count($users) <= 0) :
+            if (count($users) <= 0):
                 echo "No hay Datos a Mostrar";
-            else : ?>
+            else: ?>
                 <table class="table table-light table-hover">
                     <thead class="table-dark">
                         <tr>
@@ -40,24 +41,44 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($users as $user) :
+                        <?php foreach ($users as $user):
                             $id = $user->id;
-                        ?>
+                            ?>
                             <tr>
-                                <th scope="row"><?= $user->id ?></th>
-                                <td><?= $user->usuario ?></td>
-                                <td><?= $user->name ?></td>
-                                <td><?= $user->email ?></td>
-                                <td><a class="btn btn-danger" href="index.php?tabla=user&accion=borrar&id=<?= $id ?>"><i class="fa fa-trash"></i> Borrar</a></td>
-                                <td><a class="btn btn-success" href="index.php?tabla=user&accion=editar&id=<?= $id ?>"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+                                <th scope="row">
+                                    <?= $user->id ?>
+                                </th>
+                                <td>
+                                    <?= $user->usuario ?>
+                                </td>
+                                <td>
+                                    <?= $user->name ?>
+                                </td>
+                                <td>
+                                    <?= $user->email ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $disable = "";
+                                    $ruta = "index.php?tabla=user&accion=borrar&id={$id}";
+                                    if (isset($user->esBorrable) && $user->esBorrable == false) {
+                                        $disable = "disabled";
+                                        $ruta = "#";
+                                    }
+                                    ?>
+                                    <a class="btn btn-danger <?= $disable ?>" href="<?= $ruta ?>"><i class="fa fa-trash"></i>
+                                        Borrar</a>
+                                </td>
+                                <td><a class="btn btn-success" href="index.php?tabla=user&accion=editar&id=<?= $id ?>"><i
+                                            class="fas fa-pencil-alt"></i> Editar</a></td>
                             </tr>
-                        <?php
+                            <?php
                         endforeach;
 
                         ?>
                     </tbody>
                 </table>
-            <?php
+                <?php
             endif;
             ?>
     </div>
