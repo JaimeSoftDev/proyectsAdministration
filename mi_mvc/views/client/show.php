@@ -18,9 +18,13 @@ $client = $controlador->ver($id);
     <div id="contenido">
         <div class="card"  style="width: 18rem;">
             <div >
-                <h5 class="card-title">ID: <?= $client->id ?> <br>NOMBRE: <?= $client->contact_name ?></h5>
+                <h5 class="card-title">ID: <?= $client->id ?> <br>Nombre: <?= $client->contact_name ?></h5>
                 <p class="card-text">
                     Nombre: <?= $client->contact_name ?><br>
+                    Email: <?= $client->contact_email ?><br>
+                    Teléfono: <?= $client->contact_phone_number ?><br>
+                    Compañía: <?= $client->company_name ?><br>
+                    Teléfono de la compañía: <?= $client->company_phone_number ?><br>
                     Email: <?= $client->contact_email ?><br>
                 </p>
                 <a href="index.php" class="btn btn-primary">Volver a Inicio</a>

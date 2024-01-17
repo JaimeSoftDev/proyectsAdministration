@@ -7,7 +7,7 @@ $visibilidad = "hidden";
 if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
     $visibilidad = "visibility";
     $clase = "alert alert-success";
-    $mensaje = "El cliente con id: {$_REQUEST['id']} y nombre: {$_REQUEST['nombreContaco']} Borrado correctamente";
+    $mensaje = "El cliente con id: {$_REQUEST['id']} y nombre: {$_REQUEST['nombre']} Borrado correctamente";
     if (isset($_REQUEST["error"])) {
         $clase = "alert alert-danger ";
         $mensaje = "ERROR!!! No se ha podido borrar el usuario con id: {$_REQUEST['id']}";
@@ -39,8 +39,8 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
                             <th scope="col">Nombre de la compañía</th>
                             <th scope="col">Dirección de la compañía</th>
                             <th scope="col">Teléfono de la compañía</th>
-                            <th scope="col">Eliminar</th>
-                            <th scope="col">Editar</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,8 +56,8 @@ if (isset($_REQUEST["evento"]) && $_REQUEST["evento"] == "borrar") {
                                 <td><?= $client->company_name ?></td>
                                 <td><?= $client->company_address ?></td>
                                 <td><?= $client->company_phone_number ?></td>
-                                <td><a class="btn btn-danger" href="index.php?tabla=user&accion=borrar&id=<?= $id ?>"><i class="fa fa-trash"></i> Borrar</a></td>
-                                <td><a class="btn btn-success" href="index.php?tabla=user&accion=editar&id=<?= $id ?>"><i class="fas fa-pencil-alt"></i> Editar</a></td>
+                                <td><a class="btn btn-danger" href="index.php?tabla=client&accion=borrar&id=<?= $id ?>"><i class="fa fa-trash"></i> Borrar</a></td>
+                                <td><a class="btn btn-success" href="index.php?tabla=client&accion=editar&id=<?= $id ?>"><i class="fas fa-pencil-alt"></i> Editar</a></td>
                             </tr>
                         <?php
                         endforeach;

@@ -9,4 +9,4 @@ if (!isset ($_REQUEST["id"])){
 $id=$_REQUEST["id"];
 
 $controlador= new ClientsController();
-$borrado=$controlador->borrar ($id);
+$controlador->borrar($id);

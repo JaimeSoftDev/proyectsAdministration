@@ -23,7 +23,7 @@ if (isset($_REQUEST["error"])) {
     <form action="index.php?tabla=client&accion=guardar&evento=crear" method="POST">
       <div class="form-group">
         <label for="nombreContacto">ID Fiscal </label>
-        <input type="number" required class="form-control" id="idFiscal" name="idFiscal"
+        <input type="text" required class="form-control" id="idFiscal" name="idFiscal"
           value="<?= $_SESSION["datos"]["idFiscal"] ?? "" ?>" placeholder="Introduce el ID Fiscal">
         <?= isset($errores["idFiscal"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "idFiscal") . '</div>' : ""; ?>
       </div>
@@ -46,22 +46,22 @@ if (isset($_REQUEST["error"])) {
         <?= isset($errores["telefono"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefono") . '</div>' : ""; ?>
       </div>
       <div class="form-group">
-        <label for="nombreCompañia">Nombre de la compañía </label>
-        <input type="text" class="form-control" id="nombreCompañia" name="nombreCompañia" value="<?= $_SESSION["datos"]["nombreCompañia"] ?? "" ?>"
+        <label for="nombreCompania">Nombre de la compañía </label>
+        <input type="text" class="form-control" id="nombreCompania" name="nombreCompania" value="<?= $_SESSION["datos"]["nombreCompania"] ?? "" ?>"
           placeholder="Introduce el nombre de la compañía">
-        <?= isset($errores["nombreCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "nombreCompañia") . '</div>' : ""; ?>
+        <?= isset($errores["nombreCompania"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "nombreCompania") . '</div>' : ""; ?>
       </div>
       <div class="form-group">
-        <label for="direccionCompañia">Dirección de la compañía </label>
-        <input type="text" class="form-control" id="direccionCompañia" name="direccionCompañia" value="<?= $_SESSION["datos"]["direccionCompañia"] ?? "" ?>"
+        <label for="direccionCompania">Dirección de la compañía </label>
+        <input type="text" class="form-control" id="direccionCompania" name="direccionCompania" value="<?= $_SESSION["datos"]["direccionCompania"] ?? "" ?>"
           placeholder="Introduce la direccion de la compañía">
-        <?= isset($errores["direccionCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "direccionCompañia") . '</div>' : ""; ?>
+        <?= isset($errores["direccionCompania"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "direccionCompania") . '</div>' : ""; ?>
       </div>
       <div class="form-group">
-        <label for="telefonoCompañia">Teléfono de la compañía </label>
-        <input type="number" class="form-control" id="telefonoCompañia" name="telefonoCompañia" value="<?= $_SESSION["datos"]["telefonoCompañia"] ?? "" ?>"
+        <label for="telefonoCompania">Teléfono de la compañía </label>
+        <input type="number" class="form-control" id="telefonoCompania" name="telefonoCompania" value="<?= $_SESSION["datos"]["telefonoCompania"] ?? "" ?>"
           placeholder="Introduce el teléfono de la compañía">
-        <?= isset($errores["telefonCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefonoCompañia") . '</div>' : ""; ?>
+        <?= isset($errores["telefonCompañia"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefonoCompania") . '</div>' : ""; ?>
       </div>
       <button type="submit" class="btn btn-primary">Guardar</button>
       <a class="btn btn-danger" href="index.php">Cancelar</a>

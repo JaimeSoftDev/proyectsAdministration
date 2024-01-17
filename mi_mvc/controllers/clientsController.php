@@ -30,9 +30,8 @@ class ClientsController
 
         $client = $this->model->read($id);
         $nombre = $client->contact_name;
-        $compañia = $client->company_name;
         $borrado = $this->model->delete($id);
-        $redireccion = "location:index.php?accion=listar&tabla=client&evento=borrar&id={$id}&nombre={$nombre}&compañia={$compañia}";
+        $redireccion = "location:index.php?accion=listar&tabla=client&evento=borrar&id={$id}&nombre={$nombre}";
 
         if ($borrado == false)
             $redireccion .= "&error=true";
@@ -51,9 +50,9 @@ class ClientsController
         header($redireccion);
         exit();
     }
-    public function buscar(string $usuario): array
+    public function buscar($client, $campo, $metodo): array
     {
-        return $this->model->search($usuario);
+        return $this->model->search($client, $campo, $metodo);
     }
 
 }

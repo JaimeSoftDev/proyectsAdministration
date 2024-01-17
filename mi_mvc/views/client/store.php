@@ -14,9 +14,9 @@ $arrayClient=[
                 "nombreContacto" => $_REQUEST["nombreContacto"],
                 "emailContacto" => $_REQUEST["emailContacto"],
                 "telefono" => $_REQUEST["telefono"],
-                "nombreCompañia" => $_REQUEST["nombreCompañia"],
-                "direccionCompañia" => $_REQUEST["direccionCompañia"],
-                "telefonoCompañia" => $_REQUEST["telefonoCompañia"],     
+                "nombreCompania" => $_REQUEST["nombreCompania"],
+                "direccionCompania" => $_REQUEST["direccionCompania"],
+                "telefonoCompania" => $_REQUEST["telefonoCompania"],     
                 ];
 
 //pagina invisible

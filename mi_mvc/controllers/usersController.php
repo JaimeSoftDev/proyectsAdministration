@@ -100,9 +100,9 @@ class UsersController
         header($redireccion);
         exit();
     }
-    public function buscar(string $usuario): array
+    public function buscar(string $usuario, string $campo, string $metodo): array
     {
-        return $this->model->search($usuario);
+        return $this->model->search($usuario, $campo, $metodo);
     }
 
 }

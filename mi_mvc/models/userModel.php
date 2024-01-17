@@ -88,16 +88,33 @@ class UserModel
         }
     }
 
-    public function search(string $usuario): array
+    public function search(string $dato = "", string $campo = "name", string $metodo = "contiene"): array
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM users WHERE usuario LIKE :usuario");
+        $sentencia = $this->conexion->prepare("SELECT * FROM users WHERE $campo LIKE :dato");
         //ojo el si ponemos % siempre en comillas dobles "
-        $arrayDatos = [":usuario" => "%$usuario%"];
+        switch ($metodo) {
+            case "contiene":
+                $arrayDatos = [":dato" => "%$dato%"];
+                break;
+            case "empieza":
+                $arrayDatos = [":dato" => "$dato%"];
+                break;
+            case "acaba":
+                $arrayDatos = [":dato" => "%$dato"];
+                break;
+            case "igual":
+                $arrayDatos = [":dato" => "$dato"];
+                break;
+            default:
+                $arrayDatos = [":dato" => "%$dato%"];
+                break;
+        }
+
         $resultado = $sentencia->execute($arrayDatos);
         if (!$resultado)
             return [];
-        $users = $sentencia->fetchAll(PDO::FETCH_OBJ);
-        return $users;
+        $clients = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $clients;
     }
     public function login(string $usuario, string $password): ?stdClass
     {

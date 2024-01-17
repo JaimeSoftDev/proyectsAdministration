@@ -1,7 +1,8 @@
 <?php
 require_once('config/db.php');
 
-class ClientModel{
+class ClientModel
+{
     private $conexion;
 
     public function __construct()
@@ -11,17 +12,17 @@ class ClientModel{
 
     public function insert(array $client): ?int //devuelve entero o null
     {
-        $sql = "INSERT INTO clients(idFiscal, contact_name, contact_email, contact_phone_number, company_name, company_address, company_phone_number) ";  
-        $sql.= " VALUES (:idFiscal, :nombreContacto, :emailContacto, :telefono, :nombreCompañia, :direccionCompañia, :telefonoCompañia);";
+        $sql = "INSERT INTO clients(idFiscal, contact_name, contact_email, contact_phone_number, company_name, company_address, company_phone_number) ";
+        $sql .= " VALUES (:idFiscal, :nombreContacto, :emailContacto, :telefono, :nombreCompania, :direccionCompania, :telefonoCompania);";
         $sentencia = $this->conexion->prepare($sql);
         $arrayDatos = [
             ":idFiscal" => $client["idFiscal"],
             ":nombreContacto" => $client["nombreContacto"],
             ":emailContacto" => $client["emailContacto"],
             ":telefono" => $client["telefono"],
-            ":nombreCompañia" => $client["nombreCompañia"],
-            ":direccionCompañia" => $client["direccionCompañia"],
-            ":telefonoCompañia" => $client["telefonoCompañia"],
+            ":nombreCompania" => $client["nombreCompania"],
+            ":direccionCompania" => $client["direccionCompania"],
+            ":telefonoCompania" => $client["telefonoCompania"],
         ];
         $resultado = $sentencia->execute($arrayDatos);
 
@@ -74,17 +75,17 @@ class ClientModel{
     {
         try {
             $sql = "UPDATE clients SET contact_name = :nombreContacto, contact_email = :emailContacto, contact_phone_number = :telefonoContacto, 
-            company_name = :nombreCompañia, company_address = :direccionCompañia, company_phone_number = :telefonoCompañia";
-            
+            company_name = :nombreCompania, company_address = :direccionCompania, company_phone_number = :telefonoCompania";
+
             $sql .= " WHERE id = :id;";
             $arrayDatos = [
                 ":id" => $idAntiguo,
                 ":nombreContacto" => $arrayCliente["nombreContacto"],
-            "emailContacto" => $arrayCliente["emailContacto"],
-            ":telefono" => $arrayCliente["telefono"],
-            ":nombreCompañia" => $arrayCliente["nombreCompañia"],
-            ":direccionCompañia" => $arrayCliente["direccionCompañia"],
-            ":telefonoCompañia" => $arrayCliente["telefonoCompañia"],
+                "emailContacto" => $arrayCliente["emailContacto"],
+                ":telefono" => $arrayCliente["telefono"],
+                ":nombreCompania" => $arrayCliente["nombreCompania"],
+                ":direccionCompania" => $arrayCliente["direccionCompania"],
+                ":telefonoCompania" => $arrayCliente["telefonoCompania"],
             ];
             $sentencia = $this->conexion->prepare($sql);
             return $sentencia->execute($arrayDatos);
@@ -94,9 +95,9 @@ class ClientModel{
         }
     }
 
-    public function search(string $campo = "contact_name", string $metodo = "contiene", string $dato = ""): array
+    public function search(string $dato = "", string $campo = "contact_name", string $metodo = "contiene"): array
     {
-        $sentencia = $this->conexion->prepare("SELECT * FROM projects WHERE $campo LIKE :dato");
+        $sentencia = $this->conexion->prepare("SELECT * FROM clients WHERE $campo LIKE :dato");
         //ojo el si ponemos % siempre en comillas dobles "
         switch ($metodo) {
             case "contiene":
