@@ -92,17 +92,66 @@ class ClientsController
         header($redireccion);
         exit();
     }
-    public function editar(int $id, array $arrayClient): void
+    public function editar(string $id, array $arrayClient): void
     {
+        $error = false;
+        $errores = [];
+        if (isset($_SESSION["errores"])) {
+            unset($_SESSION["errores"]);
+            unset($_SESSION["datos"]);
+        }
 
-        $editadoCorrectamente = $this->model->edit($id, $arrayClient);
-        //lo separo para que se lea mejor en el word
-        $redireccion = "location:index.php?tabla=client&accion=editar";
-        $redireccion .= "&evento=modificar&id={$id}";
-        $redireccion .= ($editadoCorrectamente == false) ? "&error=true" : "";
-        //vuelvo a la pagina donde estaba
+        // ERRORES DE TIPO
+        if(!is_valid_dni($arrayClient["idFiscal"])){
+            $error = true;
+            $errores["idFiscal"][]="El dni introducido no es válido";
+        }
+
+        //campos NO VACIOS
+        $arrayNoNulos = ["idFiscal", "nombreContacto", "emailContacto"];
+        $nulos = HayNulos($arrayNoNulos, $arrayClient);
+        if (count($nulos) > 0){
+            $error = true;
+            for($i=0; $i<count($nulos); $i++){
+                $errores[$nulos[$i]][]="El campo {$nulos[$i]} es nulo";
+            }
+        }
+
+        //CAMPOS UNICOS
+        //Los campos únicos en este caso deben ser el idFiscal y el Email de contacto
+        if ($arrayClient["idFiscal"] != $arrayClient["idFiscalOriginal"]){
+            if ($this->model->exists("idFiscal", $arrayClient["idFiscal"])) {
+                $errores["idFiscal"][] = "El idFiscal  {$arrayClient["idFiscal"]}  ya existe";
+                $error = true;
+            }
+        }
+        if ($arrayClient["emailContacto"] != $arrayClient["emailContactoOriginal"]){
+            if ($this->model->exists("contact_email", $arrayClient["emailContacto"])) {
+                $errores["emailContacto"][] = "El email  {$arrayClient["emailContacto"]}  ya existe";
+                $error = true;
+            }
+        }
+
+        //todo correcto
+        $editado = false;
+        if (!$error)
+            $editado = $this->model->edit($id, $arrayClient);
+
+        if ($editado == false) {
+            $_SESSION["errores"] = $errores;
+            $_SESSION["datos"] = $arrayClient;
+            $redireccion = "location:index.php?accion=editar&tabla=client&evento=modificar&id={$id}&error=true";
+        } else {
+            //vuelvo a limpiar por si acaso
+            unset($_SESSION["errores"]);
+            unset($_SESSION["datos"]);
+            //este es el nuevo numpieza
+            $id = $arrayClient["id"];
+            $redireccion = "location:index.php?accion=editar&tabla=client&evento=modificar&id={$id}";
+        }
         header($redireccion);
         exit();
+        //vuelvo a la pagina donde estaba
     }
     public function buscar($client, $campo, $metodo, bool $comprobarSiEsBorrable = false): array
     {

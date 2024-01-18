@@ -41,9 +41,9 @@ if (isset($_REQUEST["error"])) {
       </div>
       <div class="form-group">
         <label for="telefono">Teléfono </label>
-        <input type="number" class="form-control" id="telefono" name="telefono" placeholder="Introduce tu teléfono"
+        <input type="number" class="form-control" id="telefonoContacto" name="telefonoContacto" placeholder="Introduce tu teléfono"
           value="<?= $_SESSION["datos"]["telefono"] ?? "" ?>">
-        <?= isset($errores["telefono"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefono") . '</div>' : ""; ?>
+        <?= isset($errores["telefonoContacto"]) ? '<div class="alert alert-danger" role="alert">' . DibujarErrores($errores, "telefonoContacto") . '</div>' : ""; ?>
       </div>
       <div class="form-group">
         <label for="nombreCompania">Nombre de la compañía </label>

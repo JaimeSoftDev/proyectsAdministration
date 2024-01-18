@@ -14,13 +14,13 @@ class ClientModel
     {
         try {
             $sql = "INSERT INTO clients(idFiscal, contact_name, contact_email, contact_phone_number, company_name, company_address, company_phone_number) ";
-            $sql .= " VALUES (:idFiscal, :nombreContacto, :emailContacto, :telefono, :nombreCompania, :direccionCompania, :telefonoCompania);";
+            $sql .= " VALUES (:idFiscal, :nombreContacto, :emailContacto, :telefonoContacto, :nombreCompania, :direccionCompania, :telefonoCompania);";
             $sentencia = $this->conexion->prepare($sql);
             $arrayDatos = [
                 ":idFiscal" => $client["idFiscal"],
                 ":nombreContacto" => $client["nombreContacto"],
                 ":emailContacto" => $client["emailContacto"],
-                ":telefono" => $client["telefono"],
+                ":telefonoContacto" => $client["telefonoContacto"],
                 ":nombreCompania" => $client["nombreCompania"],
                 ":direccionCompania" => $client["direccionCompania"],
                 ":telefonoCompania" => $client["telefonoCompania"],
@@ -74,13 +74,16 @@ class ClientModel
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM clients WHERE id =:id";
-        
+        try {
             $sentencia = $this->conexion->prepare($sql);
             //devuelve true si se borra correctamente
             //false si falla el borrado
             $resultado = $sentencia->execute([":id" => $id]);
             return ($sentencia->rowCount() <= 0) ? false : true;
-        
+        } catch (Exception $e) {
+            echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
+            return false;
+        }
     }
 
     public function edit(int $idAntiguo, array $arrayCliente): bool
@@ -94,7 +97,7 @@ class ClientModel
                 ":id" => $idAntiguo,
                 ":nombreContacto" => $arrayCliente["nombreContacto"],
                 "emailContacto" => $arrayCliente["emailContacto"],
-                ":telefono" => $arrayCliente["telefono"],
+                ":telefonoContacto" => $arrayCliente["telefonoContacto"],
                 ":nombreCompania" => $arrayCliente["nombreCompania"],
                 ":direccionCompania" => $arrayCliente["direccionCompania"],
                 ":telefonoCompania" => $arrayCliente["telefonoCompania"],
@@ -105,6 +108,7 @@ class ClientModel
             echo 'Excepción capturada: ', $e->getMessage(), "<bR>";
             return false;
         }
+
     }
 
     public function search(string $dato = "", string $campo = "contact_name", string $metodo = "contiene"): array
