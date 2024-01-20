@@ -30,6 +30,7 @@
           <i class="fas fa-project-diagram"></i> Proyectos</a>
         <ul class="dropdown-menu dropdown-menu-dark">
           <li><a class="dropdown-item" href="index.php?tabla=project&accion=crear">Añadir</a></li>
+          <li><a class="dropdown-item" href="index.php?tabla=project&accion=listar">Listar</a></li>
           <li><a class="dropdown-item" href="index.php?tabla=project&accion=buscar">Buscar </a></li>
         </ul>
       </li>
