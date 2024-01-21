@@ -43,6 +43,15 @@ function router()
             "borrar" => "delete.php",
             "editar" => "edit.php"
         ],
+        "task" => [
+            "crear" => "create.php",
+            "guardar" => "store.php",
+            "ver" => "show.php",
+            "listar" => "list.php",
+            "buscar" => "search.php",
+            "borrar" => "delete.php",
+            "editar" => "edit.php"
+        ],
     ];
     $tabla = $_REQUEST["tabla"];
     if (!isset($tablas[$tabla]))

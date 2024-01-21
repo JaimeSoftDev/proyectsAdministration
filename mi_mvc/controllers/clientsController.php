@@ -69,7 +69,7 @@ class ClientsController
     {
         return $this->model->read($id);
     }
-    public function listar(bool $comprobarSiEsBorrable=false)
+    public function listar(bool $comprobarSiEsBorrable=false):array
     {
         $clients = $this->model->readAll();
         if ($comprobarSiEsBorrable) {

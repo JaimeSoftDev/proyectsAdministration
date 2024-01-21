@@ -45,7 +45,7 @@ class ProjectModel
         return $projects;
     }
 
-    public function searchbyUser(stdClass $project, string $campo = "id", string $metodo = "contiene", string $dato = ""): array
+    public function searchbyUser(stdClass $usuario, string $campo = "id", string $metodo = "contiene", string $dato = ""): array
     {
         $sql= "select projects.*,  users.name as name_user,users.usuario as usuario_user, ";
         $sql.="clients.contact_name as contact_name_client, clients.idFiscal as idFiscal_client, ";
@@ -56,7 +56,7 @@ class ProjectModel
         $sql.= " WHERE projects.user_id= :user_id AND $campo LIKE :dato ;";
         $sentencia = $this->conexion->prepare($sql);
         //ojo el si ponemos % siempre en comillas dobles "
-        $arrayDatos[":user_id"]= $project->id;
+        $arrayDatos[":user_id"]= $usuario->id;
         switch ($metodo) {
             case "contiene":
                 $arrayDatos [":dato"] = "%$dato%";
@@ -177,6 +177,7 @@ class ProjectModel
             $sql = "UPDATE projects SET name = :name, description=:description, ";
             $sql .= "deadline = :deadline, status= :status, user_id=:user_id,client_id=:client_id  ";
             $sql .= " WHERE id = :id;";
+            $sql .= "UPDATE tasks SET client_id=:client_id WHERE project_id=:id;";
             $arrayDatos = [
                 ":id" => $idAntiguo,
                 ":name" => $arrayProject["name"],

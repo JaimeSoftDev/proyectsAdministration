@@ -69,7 +69,7 @@ if (isset($_REQUEST["evento"])) {
                         <option value="clients.contact_name" <?= $campo == "clients.contact_name" ? "selected" : "" ?>>
                             Nombre Contacto Cliente</option>
                         <option value="clients.idFiscal" <?= $campo == "clients.idFiscal" ? "selected" : "" ?>> Id Fiscal
-                            de Cliente de Usuario </option>
+                            de Cliente </option>
                         <option value="clients.company_name" <?= $campo == "clients.company_name" ? "selected" : "" ?>>
                             Nombre Empresa Cliente </option>
                     </select>
