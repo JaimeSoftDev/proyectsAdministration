@@ -72,7 +72,7 @@ $tasks = $contlTask->listarPorProyecto($id, true);
                             Borrar</a>
                     </td>
                     <td> 
-                        <?= ($project->user_id == $_SESSION["usuario"]->id||$task->user_id==$_SESSION["usuario"]->id) ? "<a class='btn btn-success' href='index.php?tabla=task&accion=editar&task_id={$task->id}&id={$id}'><i class='fas fa-pencil-alt'></i> Editar Tarea</a>" : "<a disabled class='btn btn-success disabled' href='#'><i class='fas fa-pencil-alt'></i> Editar Tarea</a>"; ?></td>
+                        <?= ($project->user_id == $_SESSION["usuario"]->id) ? "<a class='btn btn-success' href='index.php?tabla=task&accion=editar&task_id={$task->id}&id={$id}'><i class='fas fa-pencil-alt'></i> Editar Tarea</a>" : "<a disabled class='btn btn-success disabled' href='#'><i class='fas fa-pencil-alt'></i> Editar Tarea</a>"; ?></td>
                 </tr>
                 <?php
             }

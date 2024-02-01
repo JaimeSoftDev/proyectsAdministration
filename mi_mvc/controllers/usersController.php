@@ -174,7 +174,14 @@ class UsersController
         // si ese usuario está en algún proyecto, No se puede borrar.
         if (count($projectController->buscar("user_id", "igual", $user->id)) > 0)
             $borrable = false;
+        if ($borrable == false)
+            return false;
 
+        $taskController = new TasksController();
+        $borrable = true;
+        // si ese usuario está en alguna tarea, No se puede borrar.
+        if (count($taskController->buscar("user_id", "igual", $user->id)) > 0)
+            $borrable = false;
         return $borrable;
     }
 
