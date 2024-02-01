@@ -131,14 +131,11 @@ if (isset($_REQUEST["evento"])) {
                                     <?= $task->description ?>
                                 </td>
                                 <td <?php
-                                $fecha = explode("-", date('d-m-Y', strtotime($task->deadline)));
-                                if ($fecha[2] <= getdate()["year"]) {
-                                    if ($fecha[1] <= getdate()["mon"]) {
-                                        if ($fecha[0] < getdate()["mday"]) {
-                                            echo "style='color:red'";
-                                        }
-
-                                    }
+                                $fechaLimite = new DateTime($task->deadline);
+                                $fechaActual = new DateTime();
+            
+                                if ($fechaLimite <= $fechaActual) {
+                                    echo "style='color:red'";
                                 }
                                 ?>>
                                     <?= date('d-m-Y', strtotime($task->deadline)) ?>
