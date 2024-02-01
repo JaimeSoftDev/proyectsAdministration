@@ -47,6 +47,7 @@ $tasks = $contlTask->listarPorProyecto($id, true);
                 <tr>
                     <td><?= $task->name ?></td>
                     <td <?php
+                    //Este código es para dar color rojo a la fecha si es menor a la fecha actual
                     $fecha = explode("-",date('d-m-Y', strtotime($task->deadline)));
                     if ($fecha[2]<=getdate()["year"]){
                         if ($fecha[1]<=getdate()["mon"]){
